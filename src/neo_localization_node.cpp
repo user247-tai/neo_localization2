@@ -163,44 +163,50 @@ LifecycleCallbackReturn NeoLocalizationNode::on_shutdown(const rclcpp_lifecycle:
 void NeoLocalizationNode::initParameters(LifecycleNode::SharedPtr node)
 {
   // Declare parameters
-  node->declare_parameter("base_frame", rclcpp::ParameterValue("base_link")); //"Which frame to use for the robot base");
-  node->declare_parameter("odom_frame", rclcpp::ParameterValue("odom")); //"The name of the odom coordinate frame (local localization)");
-  node->declare_parameter("map_frame", rclcpp::ParameterValue("map")); //"The name of the coordinate frame published by the localization system");
-  node->declare_parameter("update_gain", rclcpp::ParameterValue(0.5)); //"Exponential low pass gain for localization update (0 to 1)");
-  node->declare_parameter("confidence_gain", rclcpp::ParameterValue(0.01)); //"Time based confidence gain when in 2D / 1D mode");
-  node->declare_parameter("sample_rate", rclcpp::ParameterValue(10)); //"How many particles (samples) to spread (per update)");
-  node->declare_parameter("loc_update_rate", rclcpp::ParameterValue(100)); //"Localization update rate [ms]");
-  node->declare_parameter("map_update_rate", rclcpp::ParameterValue(0.5)); //"Map tile update rate [1/s]");
-  node->declare_parameter("map_size", rclcpp::ParameterValue(1000)); //"Map tile size in pixels");
-  node->declare_parameter("map_downscale", rclcpp::ParameterValue(0)); //"How often to downscale (half) the original map");
-  node->declare_parameter("num_smooth", rclcpp::ParameterValue(0)); //"How many 3x3 gaussian smoothing iterations are applied to the map");
-  node->declare_parameter("min_score", rclcpp::ParameterValue(0.2)); //"Minimum score for valid localization (otherwise 0D mode)");
-  node->declare_parameter("odometry_std_xy", rclcpp::ParameterValue(0.01)); //"Odometry error in x and y [m/m] (how fast to increase particle spread when in 1D / 0D mode)");
-  node->declare_parameter("odometry_std_yaw", rclcpp::ParameterValue(0.01)); //"Odometry error in yaw angle [rad/rad] (how fast to increase particle spread when in 0D mode)");
-  node->declare_parameter("min_sample_std_xy", rclcpp::ParameterValue(0.025)); //"Minimum particle spread in x and y [m]");
-  node->declare_parameter("min_sample_std_yaw", rclcpp::ParameterValue(0.025)); //"Minimum particle spread in yaw angle [rad]");
-  node->declare_parameter("max_sample_std_xy", rclcpp::ParameterValue(0.5)); //"Initial/maximum particle spread in x and y [m]");
-  node->declare_parameter("max_sample_std_yaw", rclcpp::ParameterValue(0.5)); //"Initial/maximum particle spread in yaw angle [rad]");
-  node->declare_parameter("constrain_threshold", rclcpp::ParameterValue(0.1)); //"Threshold for 1D / 2D position decision making (minimum average second order gradient)");
-  node->declare_parameter("constrain_threshold_yaw", rclcpp::ParameterValue(0.2)); //"Threshold for 1D / 2D decision making (with or without orientation)");
-  node->declare_parameter("min_points", rclcpp::ParameterValue(20)); //"Minimum number of points per update");
-  node->declare_parameter("solver_gain", rclcpp::ParameterValue(0.1)); //"Solver update gain, lower gain = more stability / slower convergence");
-  node->declare_parameter("solver_damping", rclcpp::ParameterValue(1000.0)); //"Solver update damping, higher damping = more stability / slower convergence");
-  node->declare_parameter("solver_iterations", rclcpp::ParameterValue(20)); //"Number of gauss-newton iterations per sample per scan");
-  node->declare_parameter("transform_timeout", rclcpp::ParameterValue(0.2)); //"Maximum wait for getting transforms [s]");
-  node->declare_parameter("broadcast_tf", rclcpp::ParameterValue(true)); //"Whether broadcast tf or not");
-  node->declare_parameter("map_topic", rclcpp::ParameterValue("map")); //"Name of map topic");
-  node->declare_parameter("scan_topic", rclcpp::ParameterValue("scan")); //"Name of scan topic");
-  node->declare_parameter("initialpose", rclcpp::ParameterValue("initialpose")); //"Name of initial pose topic");
-  node->declare_parameter("map_tile", rclcpp::ParameterValue("map_tile")); //"Name of map tile topic");
-  node->declare_parameter("map_pose", rclcpp::ParameterValue("map_pose")); //"Name of map pose topic");
-  node->declare_parameter("particle_cloud", rclcpp::ParameterValue("particlecloud")); //"Name of particle_cloud topic");
-  node->declare_parameter("amcl_pose", rclcpp::ParameterValue("amcl_pose")); //"Name of amcl_pose topic");
-  node->declare_parameter("broadcast_info", rclcpp::ParameterValue(false)); //"Broadcast info for debugging");
-  node->declare_parameter("set_initial_pose", rclcpp::ParameterValue(true)); //"Whether auto set initial pose or not");
-  node->declare_parameter("initial_pose.x", rclcpp::ParameterValue(0.0)); //"Initial pose x");
-  node->declare_parameter("initial_pose.y", rclcpp::ParameterValue(0.0)); //"Initial pose y");
-  node->declare_parameter("initial_pose.yaw", rclcpp::ParameterValue(0.0)); //"Initial pose yaw");
+  try {
+    node->declare_parameter("base_frame", rclcpp::ParameterValue("base_link")); //"Which frame to use for the robot base");
+    node->declare_parameter("odom_frame", rclcpp::ParameterValue("odom")); //"The name of the odom coordinate frame (local localization)");
+    node->declare_parameter("map_frame", rclcpp::ParameterValue("map")); //"The name of the coordinate frame published by the localization system");
+    node->declare_parameter("update_gain", rclcpp::ParameterValue(0.5)); //"Exponential low pass gain for localization update (0 to 1)");
+    node->declare_parameter("confidence_gain", rclcpp::ParameterValue(0.01)); //"Time based confidence gain when in 2D / 1D mode");
+    node->declare_parameter("sample_rate", rclcpp::ParameterValue(10)); //"How many particles (samples) to spread (per update)");
+    node->declare_parameter("loc_update_rate", rclcpp::ParameterValue(100)); //"Localization update rate [ms]");
+    node->declare_parameter("map_update_rate", rclcpp::ParameterValue(0.5)); //"Map tile update rate [1/s]");
+    node->declare_parameter("map_size", rclcpp::ParameterValue(1000)); //"Map tile size in pixels");
+    node->declare_parameter("map_downscale", rclcpp::ParameterValue(0)); //"How often to downscale (half) the original map");
+    node->declare_parameter("num_smooth", rclcpp::ParameterValue(0)); //"How many 3x3 gaussian smoothing iterations are applied to the map");
+    node->declare_parameter("min_score", rclcpp::ParameterValue(0.2)); //"Minimum score for valid localization (otherwise 0D mode)");
+    node->declare_parameter("odometry_std_xy", rclcpp::ParameterValue(0.01)); //"Odometry error in x and y [m/m] (how fast to increase particle spread when in 1D / 0D mode)");
+    node->declare_parameter("odometry_std_yaw", rclcpp::ParameterValue(0.01)); //"Odometry error in yaw angle [rad/rad] (how fast to increase particle spread when in 0D mode)");
+    node->declare_parameter("min_sample_std_xy", rclcpp::ParameterValue(0.025)); //"Minimum particle spread in x and y [m]");
+    node->declare_parameter("min_sample_std_yaw", rclcpp::ParameterValue(0.025)); //"Minimum particle spread in yaw angle [rad]");
+    node->declare_parameter("max_sample_std_xy", rclcpp::ParameterValue(0.5)); //"Initial/maximum particle spread in x and y [m]");
+    node->declare_parameter("max_sample_std_yaw", rclcpp::ParameterValue(0.5)); //"Initial/maximum particle spread in yaw angle [rad]");
+    node->declare_parameter("constrain_threshold", rclcpp::ParameterValue(0.1)); //"Threshold for 1D / 2D position decision making (minimum average second order gradient)");
+    node->declare_parameter("constrain_threshold_yaw", rclcpp::ParameterValue(0.2)); //"Threshold for 1D / 2D decision making (with or without orientation)");
+    node->declare_parameter("min_points", rclcpp::ParameterValue(20)); //"Minimum number of points per update");
+    node->declare_parameter("solver_gain", rclcpp::ParameterValue(0.1)); //"Solver update gain, lower gain = more stability / slower convergence");
+    node->declare_parameter("solver_damping", rclcpp::ParameterValue(1000.0)); //"Solver update damping, higher damping = more stability / slower convergence");
+    node->declare_parameter("solver_iterations", rclcpp::ParameterValue(20)); //"Number of gauss-newton iterations per sample per scan");
+    node->declare_parameter("transform_timeout", rclcpp::ParameterValue(0.2)); //"Maximum wait for getting transforms [s]");
+    node->declare_parameter("broadcast_tf", rclcpp::ParameterValue(true)); //"Whether broadcast tf or not");
+    node->declare_parameter("map_topic", rclcpp::ParameterValue("map")); //"Name of map topic");
+    node->declare_parameter("scan_topic", rclcpp::ParameterValue("scan")); //"Name of scan topic");
+    node->declare_parameter("initialpose", rclcpp::ParameterValue("initialpose")); //"Name of initial pose topic");
+    node->declare_parameter("map_tile", rclcpp::ParameterValue("map_tile")); //"Name of map tile topic");
+    node->declare_parameter("map_pose", rclcpp::ParameterValue("map_pose")); //"Name of map pose topic");
+    node->declare_parameter("particle_cloud", rclcpp::ParameterValue("particlecloud")); //"Name of particle_cloud topic");
+    node->declare_parameter("amcl_pose", rclcpp::ParameterValue("amcl_pose")); //"Name of amcl_pose topic");
+    node->declare_parameter("broadcast_info", rclcpp::ParameterValue(false)); //"Broadcast info for debugging");
+    node->declare_parameter("set_initial_pose", rclcpp::ParameterValue(true)); //"Whether auto set initial pose or not");
+    node->declare_parameter("initial_pose.x", rclcpp::ParameterValue(0.0)); //"Initial pose x");
+    node->declare_parameter("initial_pose.y", rclcpp::ParameterValue(0.0)); //"Initial pose y");
+    node->declare_parameter("initial_pose.yaw", rclcpp::ParameterValue(0.0)); //"Initial pose yaw");
+  } catch (const rclcpp::exceptions::ParameterAlreadyDeclaredException & e) {
+    RCLCPP_WARN(
+      get_logger(), "Parameter already declared exception in initParameters: %s",
+      e.what());
+  }
 }
 
 void NeoLocalizationNode::getParameters(LifecycleNode::SharedPtr node)
