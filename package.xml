@@ -13,12 +13,10 @@
     <url>https://github.com/neobotix/neo_localization2</url>
 
     <buildtool_depend>ament_cmake</buildtool_depend>
-    <build_depend>nav2_common</build_depend>
-
-    <depend>nav2_util</depend>
+    
+    <depend>angles</depend>
     <depend>rclcpp</depend>
     <depend>rclcpp_lifecycle</depend>
-    <depend>rclcpp_components</depend>
     <depend>tf2</depend>
     <depend>tf2_eigen</depend>
     <depend>tf2_ros</depend>
@@ -27,8 +25,6 @@
     <depend>geometry_msgs</depend>
     <depend>nav_msgs</depend>
     <depend>sensor_msgs</depend>
-    <depend>std_srvs</depend>
-    <depend>angles</depend>
 
     <export>
         <build_type>ament_cmake</build_type>

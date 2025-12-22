@@ -1,4 +1,4 @@
-neo_localization:
+neo_localization_node:
   ros__parameters:
     base_frame: "base_link"
     odom_frame: "odom"
